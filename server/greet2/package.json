@@ -1,0 +1,13 @@
+{
+  "name": "greeter_2",
+  "version": "1.0.0",
+  "description": "greeter 2",
+  "author": "Anssi Rantanen",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.1"
+  }
+}

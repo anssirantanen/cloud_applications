@@ -1,0 +1,15 @@
+version: "3"
+services:
+  greet1:
+    build:
+      context: greet1
+    ports: 
+      - "8001:8080"
+    environment:
+      - GREET_URL=greet2
+      - GREET_PORT=8080
+  greet2: 
+    build: 
+      context: greet2
+    expose:
+      - "8080"
