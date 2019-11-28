@@ -1,0 +1,18 @@
+image: node:latest
+
+    stages:
+      - build
+      - test
+
+    cache:
+      paths:
+        - node_modules/
+
+    install_dependencies:
+      stage: build
+      script:
+        - cd ./greet1
+        - npm install
+      artifacts:
+        paths:
+          - node_modules/
