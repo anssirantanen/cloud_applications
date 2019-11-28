@@ -8,7 +8,7 @@ cache:
 install_dependencies:
   stage: build
   script:
-    - cd ./greet1
+    - cd ./greet1/
     - npm install
   artifacts:
     paths:
