@@ -9,8 +9,7 @@ install_dependencies:
   stage: build
   script:
     - ls
-    - cd greet1/
-    - npm install
+    - npm install ./greet1
   artifacts:
     paths:
     - node_modules/
