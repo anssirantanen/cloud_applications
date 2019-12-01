@@ -3,12 +3,15 @@
 const express = require('express');
 const axios = require('axios');
 const bodyParser = require('body-parser');
+const fs = require('fs');
+const { EOL } = require('os');
 
 const PORT = 8090;
 const HOST = '0.0.0.0';
 
 const greet2URL = process.env.GREET_URL;
 const greet2Port= process.env.GREET_PORT;
+const bootLog = process.env.BOOT_LOG || "./boot.log";
 
 const fib =(n)=>  {
   if (n < 2){
@@ -16,6 +19,13 @@ const fib =(n)=>  {
   }
   return fib(n - 1) + fib (n - 2)
 }
+
+//synchronous file write for exact state
+const appendLog = (msg) =>{
+  const date = new Date().toISOString(); 
+  const entry = `${msg} ${date}${EOL}`;
+  fs.appendFileSync(bootLog, entry);
+} 
 
 const app = express();
 app.use(bodyParser.text({ type: 'text/*' }))
@@ -53,7 +63,14 @@ app.post('/fibo',(req,res) =>{
   }
 });
 
-app.listen(PORT, HOST);
-console.log(`Running on http://${HOST}:${PORT}`);
+app.listen(PORT, HOST, () =>{
+  console.log(`Running on http://${HOST}:${PORT}`);
+  console.log("serverUp");
+  appendLog("BOOT");
+} );
+process.on('exit', () => {
+  console.log("server teardown");
+  appendLog("SHUTDOWN");
+});
 
 module.exports = app;
