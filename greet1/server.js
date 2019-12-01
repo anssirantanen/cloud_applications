@@ -26,7 +26,11 @@ const appendLog = (msg) =>{
   const entry = `${msg} ${date}${EOL}`;
   fs.appendFileSync(bootLog, entry);
 } 
-
+const readLog = (cb) =>{
+  fs.readFile(bootLog, 'utf8', function(err, data) {
+    cb(err,data)
+  });
+} 
 const app = express();
 app.use(bodyParser.text({ type: 'text/*' }))
 
@@ -62,14 +66,41 @@ app.post('/fibo',(req,res) =>{
     res.status(400).send(nan)
   }
 });
+app.get('/run-log',(req,res) =>{
+  readLog((err,data) =>{
+    if(err){
+      res.status(500).send(err)
+    }else{
+      const lines = data.split(EOL).map(line => { return`${line}<br>`}).join("");
+      res.send(lines);
+    } 
+  } )
+})
 
 app.listen(PORT, HOST, () =>{
   console.log(`Running on http://${HOST}:${PORT}`);
-  console.log("serverUp");
   appendLog("BOOT");
 } );
+const shutDown =() =>  {
+  console.log('Received kill signal, shutting down gracefully');
+  app.close(() => {
+      console.log('Closed out remaining connections');
+      appendLog("SHUTDOWN");
+      process.exit(0);
+  });
+
+  setTimeout(() => {
+      console.error('Could not close connections in time, forcefully shutting down');
+      process.exit(1);
+  }, 10000);
+
+  connections.forEach(curr => curr.end());
+  setTimeout(() => connections.forEach(curr => curr.destroy()), 5000);
+}
+process.on('SIGTERM', shutDown);
+process.on('SIGINT', shutDown);
+
 process.on('exit', () => {
-  console.log("server teardown");
   appendLog("SHUTDOWN");
 });
 
