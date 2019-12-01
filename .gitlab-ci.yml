@@ -1,15 +1,26 @@
 image: node:latest
 stages:
   - build
+  - test
 cache:
   paths:
-    - node_modules/
+    - ./greet1/node_modules/
+    - ./greet2/node_modules/
 
 install_dependencies:
   stage: build
   script:
-    - ls
-    - npm install ./greet1
+    - cd ./greet1
+    - npm install
+    - cd ../greet2
+    - npm install
   artifacts:
     paths:
-    - node_modules/
+      - ./greet1/node_modules/
+      - ./greet2/node_modules/
+
+test_application:
+  stage: test
+  script: 
+    - cd ./greet2
+    - npm test
