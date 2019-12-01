@@ -24,3 +24,4 @@ test_application:
   script: 
     - cd ./greet2
     - npm test
+    - cd ../greet1

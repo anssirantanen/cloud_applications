@@ -5,7 +5,6 @@ const app = require('../server');
 const expect = chai.expect;
 chai.use(chaiHttp);
 
-//const requester= chai.request(app).keepOpen();
 
 describe("hello call", () =>{
        it("should return hello message", (done) =>{
