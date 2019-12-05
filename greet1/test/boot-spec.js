@@ -21,11 +21,13 @@ describe("run log", () =>{
            }) 
        } ),
        it("should log on shutdown", (done) =>{
-           //mimics aplication shutdonw
-            app.close()
+           const fun = () => {
             const fileC = fs.readFileSync('./boot.log', 'utf8')
-            const lines = fileC.split(EOL)
-            expect(lines[lines.length -1].startsWith("SHUTDOWN"))
+            const lines = fileC.split(EOL).filter((e) => e !== '')
+            expect(lines[lines.length -1].startsWith("SHUTDOWN")).to.equal(true)
             done();
+           }
+            app.down(fun);
+
        } )
 } )

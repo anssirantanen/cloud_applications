@@ -76,34 +76,27 @@ app.get('/run-log',(req,res) =>{
     } 
   } )
 })
-
+app.post('/shutdown',(req,res) => {
+  res.send();
+  process.kill(process.pid, "SIGINT");
+})
 var server = app.listen(PORT, HOST, () =>{
   console.log(`Running on http://${HOST}:${PORT}`);
   appendLog("BOOT");
-  server.close( () => {appendLog("SHUTDOWN")})
-  
+ //server.close( () => {})
 } );
 const shutDown =() =>  {
   console.log('Received kill signal, shutting down gracefully');
-  app.close(() => {
+  server.close(() => {
       console.log('Closed out remaining connections');
       appendLog("SHUTDOWN");
       process.exit(0);
   });
-
-  setTimeout(() => {
-      console.error('Could not close connections in time, forcefully shutting down');
-      process.exit(1);
-  }, 10000);
-
-  connections.forEach(curr => curr.end());
-  setTimeout(() => connections.forEach(curr => curr.destroy()), 5000);
 }
 process.on('SIGTERM', shutDown);
 process.on('SIGINT', shutDown);
-
 process.on('exit', () => {
   appendLog("SHUTDOWN");
 });
-
+server.down = (cb) => {server.close(() => {appendLog("SHUTDOWN");cb();})}
 module.exports = server;
