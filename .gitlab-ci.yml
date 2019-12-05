@@ -1,45 +1,31 @@
-image: docker:19.03.1
-
-services:
-  - docker:19.03.1-dind
-
-before_script:
-  - docker info
-  - curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-  - sudo apt install nodejs  
-
-stages:
-  - build
-  - test
-  - deploy
-cache:
-  paths:
-    - ./greet1/node_modules/
-    - ./greet2/node_modules/
-
-install_dependencies:
-  stage: build
-  script:
-    - cd ./greet1
-    - npm install
-    - cd ../greet2
-    - npm install
-  artifacts:
+ default:
+  image: node:latest
+  stages:
+    - build
+    - test
+    - deploy
+  cache:
     paths:
       - ./greet1/node_modules/
       - ./greet2/node_modules/
 
-test_application:
-  stage: test
-  script: 
-    - cd ./greet2
-    - npm test
-    - cd ../greet1
-    - npm test
-build_images:
-  stage: deploy
-  script:
-    - cd ./greet2
-    - docker build
-    - cd ../greet1
-    - docker build
+  install_dependencies:
+    stage: build
+    script:
+      - cd ./greet1
+      - npm install
+      - cd ../greet2
+      - npm install
+    artifacts:
+      paths:
+        - ./greet1/node_modules/
+        - ./greet2/node_modules/
+
+  test_application:
+    stage: test
+    script: 
+      - cd ./greet2
+      - npm test
+      - cd ../greet1
+      - npm test
+        
