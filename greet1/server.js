@@ -77,9 +77,11 @@ app.get('/run-log',(req,res) =>{
   } )
 })
 
-app.listen(PORT, HOST, () =>{
+var server = app.listen(PORT, HOST, () =>{
   console.log(`Running on http://${HOST}:${PORT}`);
   appendLog("BOOT");
+  server.close( () => {appendLog("SHUTDOWN")})
+  
 } );
 const shutDown =() =>  {
   console.log('Received kill signal, shutting down gracefully');
@@ -104,4 +106,4 @@ process.on('exit', () => {
   appendLog("SHUTDOWN");
 });
 
-module.exports = app;
+module.exports = server;
