@@ -2,7 +2,12 @@ image: docker:19.03.1
 
 services:
   - docker:19.03.1-dind
-  
+
+before_script:
+  - docker info
+  - curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+  - sudo apt install nodejs  
+
 stages:
   - build
   - test
