@@ -2,6 +2,7 @@ image: node:latest
 stages:
   - build
   - test
+  - deploy
 cache:
   paths:
     - ./greet1/node_modules/
@@ -25,3 +26,11 @@ test_application:
     - cd ./greet2
     - npm test
     - cd ../greet1
+    - npm test
+build_images:
+  stage: deploy
+  script:
+    - cd ./greet2
+    - docker build
+    - cd ../greet1
+    - docker build

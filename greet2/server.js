@@ -15,8 +15,21 @@ app.get('/', (req, res) => {
     const msg = `hello from ${sender}:${port} to ${HOST}:${PORT}`
   res.send(msg);
 });
+app.post('/shutdown',(req,res) => {
+  res.send();
+  process.kill(process.pid, "SIGINT");
+})
+var server = app.listen(PORT, HOST);
 
-app.listen(PORT, HOST);
+const shutDown =() =>  {
+  console.log('Received kill signal, shutting down gracefully');
+  server.close(() => {
+      console.log('Closed out remaining connections');
+      process.exit(0);
+  });
+}
+process.on('SIGTERM', shutDown);
+process.on('SIGINT', shutDown);
 console.log(`Running on http://${HOST}:${PORT}`);
 
-module.exports = app;
+module.exports = server;

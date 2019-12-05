@@ -83,7 +83,6 @@ app.post('/shutdown',(req,res) => {
 var server = app.listen(PORT, HOST, () =>{
   console.log(`Running on http://${HOST}:${PORT}`);
   appendLog("BOOT");
- //server.close( () => {})
 } );
 const shutDown =() =>  {
   console.log('Received kill signal, shutting down gracefully');
@@ -95,8 +94,6 @@ const shutDown =() =>  {
 }
 process.on('SIGTERM', shutDown);
 process.on('SIGINT', shutDown);
-process.on('exit', () => {
-  appendLog("SHUTDOWN");
-});
+
 server.down = (cb) => {server.close(() => {appendLog("SHUTDOWN");cb();})}
 module.exports = server;
