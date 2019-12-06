@@ -38,4 +38,4 @@ deploy:
     - docker build .
     - cd ../greet1 
     - docker build .
-      
+    - docker-compose .      
