@@ -31,9 +31,10 @@ test_application:
     - npm test
 deploy:
   stage: deploy
-  image: docker:19.03.1
+  image: docker:latest
   script:
-    - apk add --update py-pip &&
-      pip install docker-compose
+    - apt-get install -y python-pip
+    - pip install docker-compose
+    - docker image prune -f
     - docker --version
     - docker-compose .      
