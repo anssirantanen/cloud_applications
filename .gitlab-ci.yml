@@ -20,22 +20,21 @@ install_dependencies:
       - ./greet1/node_modules/
       - ./greet2/node_modules/
 
-  test_application:
-    stage: test
-    script: 
-      - cd ./greet2
-      - npm test
-      - cd ../greet1
-      - npm test
-
-build-container:
+test_application:
+  stage: test
+  script: 
+    - cd ./greet2
+    - npm test
+    - cd ../greet1
+    - npm test
+deploy:
+  stage: deploy
   image: docker:19.03.1
   services:
     - docker:19.03.1-dind
-  build_images:
-    stage: deploy
-    script:
-      - cd ./greet2
-      - docker build
-      - cd ../greet1
-      - docker build
+  script:
+    - docker --version
+    - cd ./greet2
+    - docker build .
+    - cd ../greet1
+    - docker build .
