@@ -34,8 +34,8 @@ deploy:
   image: docker:19.03.1
   script:
     - docker --version
-    - cd ./greet2 .
-    - docker build
-    - cd ../greet1 .
-    - docker build
+    - cd ./greet2 
+    - docker build .
+    - cd ../greet1 
+    - docker build .
       
