@@ -1,18 +1,38 @@
-image: docker:19.03.1
+image: node:latest
 stages:
   - build
-services:
-  - docker:19.03.1-dind
+  - test
+  - deploy
+cache:
+  paths:
+    - ./greet1/node_modules/
+    - ./greet2/node_modules/
 
-before_script:
-  - docker info
-build_containers:
+install_dependencies:
   stage: build
-  image: docker:19.03.1
+  script:
+    - cd ./greet1
+    - npm install
+    - cd ../greet2
+    - npm install
+  artifacts:
+    paths:
+      - ./greet1/node_modules/
+      - ./greet2/node_modules/
+
+test_application:
+  stage: test
+  script: 
+    - cd ./greet2
+    - npm test
+    - cd ../greet1
+    - npm test
+deploy:
+  stage: deploy
   script:
     - docker --version
-    - cd ./greet2
+    - cd ./greet2 .
     - docker build
-    - cd ../greet1
+    - cd ../greet1 .
     - docker build
       
