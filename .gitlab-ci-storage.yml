@@ -1,0 +1,39 @@
+image: node:latest
+stages:
+  - build
+  - test
+  - deploy
+cache:
+  paths:
+    - ./greet1/node_modules/
+    - ./greet2/node_modules/
+
+install_dependencies:
+  stage: build
+  script:
+    - cd ./greet1
+    - npm install
+    - cd ../greet2
+    - npm install
+  artifacts:
+    paths:
+      - ./greet1/node_modules/
+      - ./greet2/node_modules/
+
+test_application:
+  stage: test
+  script: 
+    - cd ./greet2
+    - npm test
+    - cd ../greet1
+    - npm test
+deploy:
+  stage: deploy
+  image: docker:19.03.1
+  script:
+    - docker --version
+    - cd ./greet2
+    - docker build
+    - cd ../greet1
+    - docker build
+      
