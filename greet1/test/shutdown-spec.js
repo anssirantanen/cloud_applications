@@ -12,10 +12,10 @@ const greet2Port= process.env.GREET_PORT;
 
 //hello from 127.0.0.1:55624 to 0.0.0.0:8090
 
-
+const chaiReq = chai.request(app)
 const scope = nock(`http://${greet2URL}:${greet2Port}`)
-  .get("/")
-  .reply(200,"hello from 127.0.0.1:55624 to 0.0.0.0:8090")
+  .post("/shutdown")
+  .reply(200,"")
 
 describe("shutdowm", () =>{
        it("stop server cluster", (done) =>{

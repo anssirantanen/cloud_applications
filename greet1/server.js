@@ -77,8 +77,15 @@ app.get('/run-log',(req,res) =>{
   } )
 })
 app.post('/shutdown',(req,res) => {
-  res.send();
-  process.kill(process.pid, "SIGINT");
+  axios.post(`http://${greet2URL}:${greet2Port}/shutdown`)
+  .then(result => {
+    process.kill(process.pid, "SIGINT");
+    res.send()
+  })
+  .catch(err => {
+    console.log(err)
+    res.sendStatus(500)
+  })
 })
 var server = app.listen(PORT, HOST, () =>{
   console.log(`Running on http://${HOST}:${PORT}`);
