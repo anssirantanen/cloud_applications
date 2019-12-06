@@ -33,9 +33,7 @@ deploy:
   stage: deploy
   image: docker:19.03.1
   script:
-    - apk update
-    - apk upgrade
-    - apk add python python-dev py-pip build-base
-    - pip install docker-compose
+    - apk add --update py-pip &&
+      pip install docker-compose
     - docker --version
     - docker-compose .      
